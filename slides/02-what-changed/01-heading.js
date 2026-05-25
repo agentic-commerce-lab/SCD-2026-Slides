@@ -2,10 +2,9 @@
 
 SCD.register({
   section: 2,
-  title: '02 · What actually changed',
+  title: '02 · What got cheap / expensive',
   render(el) {
     el.innerHTML = `
-      <div class="pre-label"><span class="dot"></span>Section 02</div>
       <div class="hero kinetic">
         <span class="line">What got <span class="accent">cheap.</span></span>
         <br>

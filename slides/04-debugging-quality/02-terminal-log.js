@@ -1,8 +1,10 @@
 'use strict';
 
 /**
- * Interactive: terminal log that streams success lines, drifts to amber
- * ("confidence: 87%"), then a human realization in red.
+ * Interactive: terminal log streams a successful-looking deploy. The agent
+ * confidently announces "0 tests failed" and ships to Slack. Then a human
+ * realizes: 0/0 — there are no tests. The hallucination is the missing
+ * question, not a wrong fact.
  */
 
 function playTerminalLog(el) {
@@ -12,24 +14,21 @@ function playTerminalLog(el) {
   const timers = [];
 
   const lines = [
-    { lvl: 'INFO', src: 'agent.run',         msg: 'task=deploy_to_staging start' },
-    { lvl: 'INFO', src: 'tool.git.status',   msg: 'OK (12ms) — clean tree' },
-    { lvl: 'INFO', src: 'tool.docker.build', msg: 'OK (4.2s) — image sha=a3f8d2e' },
-    { lvl: 'INFO', src: 'tool.k8s.apply',    msg: 'OK (1.1s) — 3 pods updated' },
-    { lvl: 'INFO', src: 'agent.observe',     msg: 'all health checks green' },
-    { lvl: 'INFO', src: 'agent.run',         msg: 'task=deploy_to_staging complete ✓' },
-    { lvl: 'INFO', src: 'agent.run',         msg: 'task=write_release_notes start' },
-    { lvl: 'INFO', src: 'tool.search',       msg: 'OK (240ms) — 12 commits found' },
-    { lvl: 'INFO', src: 'agent.synthesize',  msg: 'drafting notes (4096 tok)' },
-    { lvl: 'WARN', src: 'agent.observe',     msg: 'no test failures observed — confidence: 87%' },
-    { lvl: 'INFO', src: 'agent.run',         msg: 'task=announce_to_team start' },
-    { lvl: 'WARN', src: 'tool.slack.post',   msg: 'OK — message sent to #engineering' },
+    { lvl: 'INFO', src: 'agent.run',       msg: 'task=ship_feature_x start' },
+    { lvl: 'INFO', src: 'tool.git.commit', msg: 'OK — 14 files changed, 312 insertions' },
+    { lvl: 'INFO', src: 'tool.docker',     msg: 'OK — build succeeded (sha=a3f8d2e)' },
+    { lvl: 'INFO', src: 'agent.observe',   msg: 'no errors detected' },
+    { lvl: 'INFO', src: 'tool.k8s',        msg: 'OK — deployed to staging' },
+    { lvl: 'INFO', src: 'agent.test',      msg: 'OK — 0 / 0 tests failed' },
+    { lvl: 'INFO', src: 'agent.run',       msg: 'task=ship_feature_x complete ✓' },
+    { lvl: 'INFO', src: 'agent.run',       msg: 'task=announce_release start' },
+    { lvl: 'WARN', src: 'tool.slack',      msg: 'OK — posted to #engineering "🚀 feature X is live"' },
   ];
 
   const renderLine = (line, delay) => {
     timers.push(setTimeout(() => {
       if (cancelled) return;
-      const ts = new Date(Date.now() - (12 - timers.length) * 1700);
+      const ts = new Date(Date.now() - (lines.length - timers.length) * 1700);
       const tstr = ts.toISOString().slice(11, 19);
       const node = document.createElement('span');
       node.className = `log-line ${line.lvl.toLowerCase()}`;
@@ -44,31 +43,31 @@ function playTerminalLog(el) {
 
   lines.forEach((l, i) => renderLine(l, 200 + i * 280));
 
-  // human realization in amber
+  // long pause… then human realization in amber
   timers.push(setTimeout(() => {
     if (cancelled) return;
     const node = document.createElement('span');
     node.className = 'log-line human';
-    node.innerHTML = `<br>// wait. did we test this?`;
+    node.innerHTML = `<br>// wait — "0 / 0 tests failed" because 0 tests exist.`;
     body.appendChild(node);
     requestAnimationFrame(() => {
       node.style.transition = 'opacity 600ms ease-out';
       node.style.opacity = '1';
     });
-  }, 200 + lines.length * 280 + 1200));
+  }, 200 + lines.length * 280 + 1400));
 
-  // final red
+  // final red — the hallucination revealed
   timers.push(setTimeout(() => {
     if (cancelled) return;
     const node = document.createElement('span');
     node.className = 'log-line error';
-    node.innerHTML = `<span class="ts">··:··:··</span><span class="lvl">ERROR</span>[<span class="src">human.realization</span>] no integration test exists for this path<span class="caret" style="margin-left:0.3em"></span>`;
+    node.innerHTML = `<span class="ts">··:··:··</span><span class="lvl">ERROR</span>[<span class="src">coverage</span>] no tests for src/feature_x/ — agent never wrote any<span class="caret" style="margin-left:0.3em"></span>`;
     body.appendChild(node);
     requestAnimationFrame(() => {
       node.style.transition = 'opacity 400ms ease-out';
       node.style.opacity = '1';
     });
-  }, 200 + lines.length * 280 + 2400));
+  }, 200 + lines.length * 280 + 2700));
 
   return () => {
     cancelled = true;
@@ -78,13 +77,13 @@ function playTerminalLog(el) {
 
 SCD.register({
   section: 4,
-  title: '04 · When the agent lies',
+  title: '04 · When the agent confidently lies',
   render(el) {
     el.innerHTML = `
       <div class="terminal">
         <div class="terminal-head">
           <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
-          <span class="ttitle">daniel@laptop ~/agent — deploy.run()</span>
+          <span class="ttitle">daniel@laptop ~/agent — agent.ship_feature_x()</span>
         </div>
         <div class="terminal-body" id="termBody"></div>
       </div>

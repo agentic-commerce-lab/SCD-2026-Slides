@@ -1,11 +1,11 @@
 'use strict';
 
 SCD.register({
-  section: 4,
-  title: '04 · Debugging changed',
+  section: 6,
+  title: '06 · Shift 3',
   render(el) {
     el.innerHTML = `
-      <div class="pre-label"><span class="dot"></span>Section 04</div>
+      <div class="pre-label"><span class="dot"></span>Shift 3 · the practice</div>
       <div class="hero kinetic">
         <span class="line">You no longer debug <span class="dim">lines.</span></span>
         <br>

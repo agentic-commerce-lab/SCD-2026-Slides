@@ -1,11 +1,11 @@
 'use strict';
 
 SCD.register({
-  section: 3,
-  title: '03 · Agentic Engineering',
+  section: 6,
+  title: '06 · Shift 1',
   render(el) {
     el.innerHTML = `
-      <div class="pre-label"><span class="dot"></span>Section 03 · Agentic Engineering</div>
+      <div class="pre-label"><span class="dot"></span>Shift 1 · the systems</div>
       <div class="hero kinetic">
         <span class="line dim">From</span>
         <span class="line">deterministic programming</span>

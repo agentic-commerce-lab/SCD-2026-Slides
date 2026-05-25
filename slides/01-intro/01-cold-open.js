@@ -2,7 +2,7 @@
 
 SCD.register({
   section: 1,
-  title: '01 · Cold Open',
+  title: '01 · Intro',
   render(el) {
     el.innerHTML = `
       <div class="hero kinetic">

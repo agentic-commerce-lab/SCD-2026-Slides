@@ -1,8 +1,8 @@
 'use strict';
 
 SCD.register({
-  section: 5,
-  title: '05 · The counter-intuitive truth',
+  section: 3,
+  title: '03 · Where the value sits',
   render(el) {
     el.innerHTML = `
       <div class="hero kinetic" style="max-width:30ch">

@@ -1,11 +1,12 @@
 'use strict';
 
 /**
- * Interactive: SVG hex graph with a central AGENT node connected to
- * Goal, Context, Memory, Output, Constraints, Tools. Pulses + particles.
+ * Interactive: SVG hex graph with YOU at center, orchestrating
+ * Goal · Context · Memory · Tools · Constraints · Output.
+ * Pulses + particles flowing inward toward the engineer.
  */
 
-function playAgentGraph(el) {
+function playOrchestrationGraph(el) {
   const nodesG = el.querySelector('#nodes');
   const edgesG = el.querySelector('#edges');
   const particlesG = el.querySelector('#particles');
@@ -25,7 +26,7 @@ function playAgentGraph(el) {
   const R = 150;
   const nodeR = 40;
 
-  const positions = { agent: { x: 0, y: 0 } };
+  const positions = { you: { x: 0, y: 0 } };
   satellites.forEach(s => {
     const rad = s.angle * Math.PI / 180;
     positions[s.id] = { x: Math.cos(rad) * R, y: Math.sin(rad) * R };
@@ -40,8 +41,6 @@ function playAgentGraph(el) {
     line.setAttribute('y1', 0);
     line.setAttribute('x2', p.x);
     line.setAttribute('y2', p.y);
-    line.setAttribute('data-from', 'agent');
-    line.setAttribute('data-to', s.id);
     edgesG.appendChild(line);
   });
 
@@ -65,7 +64,7 @@ function playAgentGraph(el) {
     nodesG.appendChild(g);
   });
 
-  // center
+  // center: YOU
   {
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -74,7 +73,7 @@ function playAgentGraph(el) {
     g.appendChild(c);
     const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     t.setAttribute('class', 'node-label center');
-    t.textContent = 'AGENT';
+    t.textContent = 'YOU';
     g.appendChild(t);
     nodesG.appendChild(g);
   }
@@ -94,7 +93,7 @@ function playAgentGraph(el) {
     setTimeout(() => { if (!cancelled) e.style.opacity = '1'; }, 600 + i * 80);
   });
 
-  // pulse cycle
+  // particles flow inward (satellite → YOU) — the engineer pulls signals in
   let pulseIdx = 0;
   const pulse = () => {
     if (cancelled) return;
@@ -124,7 +123,7 @@ function playAgentGraph(el) {
 
 SCD.register({
   section: 3,
-  title: '03 · The new primitive',
+  title: '03 · The engineer orchestrates',
   render(el) {
     el.innerHTML = `
       <div class="graph-wrap">
@@ -133,10 +132,10 @@ SCD.register({
           <g class="particles" id="particles"></g>
           <g class="nodes" id="nodes"></g>
         </svg>
-        <div class="graph-caption">Engineers orchestrate <span style="color:var(--accent)">goals · context · memory · tools · constraints</span></div>
+        <div class="graph-caption">The engineer orchestrates <span style="color:var(--accent)">goals · context · memory · tools · constraints</span></div>
       </div>
     `;
   },
-  init(el) { return playAgentGraph(el); },
-  replay(el) { return playAgentGraph(el); }
+  init(el) { return playOrchestrationGraph(el); },
+  replay(el) { return playOrchestrationGraph(el); }
 });
