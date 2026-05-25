@@ -1,8 +1,8 @@
 'use strict';
 
 SCD.register({
-  section: 6,
-  title: '06 · ...',
+  section: 5,
+  title: '05 · ...',
   render(el) {
     el.innerHTML = `
       <div class="backdrop-prompt">

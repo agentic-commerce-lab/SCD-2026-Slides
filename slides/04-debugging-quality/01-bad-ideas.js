@@ -1,11 +1,11 @@
 'use strict';
 
 SCD.register({
-  section: 5,
-  title: '05 · Reality check',
+  section: 4,
+  title: '04 · Bad ideas got cheap too',
   render(el) {
     el.innerHTML = `
-      <div class="pre-label"><span class="dot"></span>Section 05 · The cost we don't talk about</div>
+      <div class="pre-label"><span class="dot"></span>The cost we don't talk about</div>
       <div class="hero-xl kinetic">
         <span class="line">AI makes</span>
         <span class="line"><span class="accent">bad ideas</span></span>

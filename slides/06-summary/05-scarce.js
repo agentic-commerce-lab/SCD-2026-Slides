@@ -1,11 +1,10 @@
 'use strict';
 
 SCD.register({
-  section: 8,
-  title: '08 · Closing',
+  section: 6,
+  title: '06 · The scarce resource',
   render(el) {
     el.innerHTML = `
-      <div class="pre-label"><span class="dot"></span>Section 08 · Closing</div>
       <div class="hero kinetic" style="max-width:28ch">
         <span class="line dim">The scarce resource</span>
         <span class="line dim">is no longer code production.</span>

@@ -496,6 +496,87 @@
       vertical-align: -0.05em;
     }
 
+    /* ---- section card ---- */
+    .section-card {
+      text-align: center;
+      max-width: 100%;
+    }
+    .sec-rule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 3vw, 2rem);
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+    }
+    .sec-line {
+      width: clamp(2.5rem, 8vw, 7rem);
+      height: 1px;
+      background: var(--dim);
+    }
+    .sec-num {
+      font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+      letter-spacing: 0.35em;
+      color: var(--dim);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    .sec-title {
+      font-size: clamp(2.8rem, 8.5vw, 6.5rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--fg);
+      margin-bottom: clamp(1rem, 2.5vw, 2rem);
+      max-width: 22ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .sec-title .accent { color: var(--accent); }
+    .sec-tag {
+      font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+      color: var(--dim);
+      letter-spacing: 0.04em;
+      font-style: italic;
+    }
+
+    /* ---- whoami slide ---- */
+    .whoami {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      width: min(900px, 88vw);
+    }
+    .wm-prompt {
+      font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+      color: var(--fg);
+      letter-spacing: -0.005em;
+      display: flex;
+      gap: 0.6em;
+      align-items: baseline;
+    }
+    .wm-path {
+      color: var(--accent);
+    }
+    .wm-sigil { color: var(--dim); }
+    .wm-cmd { color: var(--fg); }
+    .wm-out {
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      min-height: 1.3em;
+      display: flex;
+      align-items: baseline;
+    }
+    .wm-id {
+      display: inline-block;
+    }
+    .wm-id.final {
+      color: var(--fg);
+    }
+
     /* ---- comic slide ---- */
     .comic-wrap {
       display: flex;
@@ -609,6 +690,51 @@
       font-size: clamp(1.4rem, 3.5vw, 3rem);
       color: var(--accent);
       font-weight: 300;
+    }
+
+    /* ---- activities list (where the work goes) ---- */
+    .activities {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.4rem, 3vw, 2.4rem);
+      max-width: min(900px, 90vw);
+    }
+    .activity {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: clamp(1.2rem, 3vw, 2.5rem);
+      align-items: baseline;
+      opacity: 0;
+      transform: translateX(-14px);
+      transition: opacity 600ms ease-out, transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .activity.in { opacity: 1; transform: translateX(0); }
+    .activity .num {
+      font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+      color: var(--dim);
+      letter-spacing: 0.25em;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      min-width: 2.5ch;
+      padding-top: 0.6em;
+    }
+    .activity .body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .activity .name {
+      font-size: clamp(1.8rem, 4.2vw, 3.6rem);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--fg);
+    }
+    .activity .name .accent { color: var(--accent); }
+    .activity .desc {
+      font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+      color: var(--dim);
+      letter-spacing: 0.01em;
     }
 
     /* ---- emerging roles list ---- */
@@ -863,10 +989,10 @@
     <div class="ui-brand"><span class="br-accent">SCD</span>·2026</div>
     <div class="ui-title" id="uiTitle"></div>
     <div class="ui-counter">
-      <span id="curSec">00</span><span class="slash">/</span><span class="total">08</span>
+      <span id="curSlide">01</span><span class="slash">/</span><span id="totalSlides" class="total">--</span>
     </div>
     <div class="ui-dots" id="uiDots"></div>
-    <div class="ui-hint" id="uiHint">→ next · ← prev · 1–8 jump · F fullscreen · R replay · S storyboard</div>
+    <div class="ui-hint" id="uiHint">→ next · ← prev · 1–6 jump · F fullscreen · R replay · S storyboard</div>
   </div>
 
   <!-- QR code generator (CDN). For full offline guarantee, download qrcode.min.js next to this file. -->
@@ -876,28 +1002,44 @@
        Load order = display order. To add a slide, drop a file in slides/<section>/
        and append it here. To reorder, change the order of script tags below. -->
   <script src="slides/_helpers.js"></script>
-  <script src="slides/00-title/00-title.js"></script>
-  <script src="slides/01-cold-open/00-cold-open.js"></script>
-  <script src="slides/01-cold-open/01-why.js"></script>
-  <script src="slides/02-what-changed/00-heading.js"></script>
-  <script src="slides/02-what-changed/01-token-stream.js"></script>
-  <script src="slides/02-what-changed/02-compress.js"></script>
-  <script src="slides/03-agentic-engineering/00-intro.js"></script>
-  <script src="slides/03-agentic-engineering/01-agent-graph.js"></script>
-  <script src="slides/03-agentic-engineering/02-shift.js"></script>
-  <script src="slides/04-debugging-changed/00-debug-systems.js"></script>
-  <script src="slides/04-debugging-changed/01-terminal-log.js"></script>
-  <script src="slides/04-debugging-changed/02-old-new.js"></script>
-  <script src="slides/05-reality-check/00-bad-ideas.js"></script>
-  <script src="slides/05-reality-check/01-comic.js"></script>
-  <script src="slides/05-reality-check/02-counter.js"></script>
-  <script src="slides/05-reality-check/03-senior-engineers.js"></script>
-  <script src="slides/06-trenches/00-divider.js"></script>
-  <script src="slides/06-trenches/01-backdrop.js"></script>
-  <script src="slides/07-future-roles/00-roles.js"></script>
-  <script src="slides/07-future-roles/01-taste.js"></script>
-  <script src="slides/08-closing/00-scarce.js"></script>
-  <script src="slides/08-closing/01-thanks.js"></script>
+
+  <!-- 01 — Intro -->
+  <script src="slides/01-intro/00-title.js"></script>
+  <script src="slides/01-intro/01-cold-open.js"></script>
+  <script src="slides/01-intro/02-why.js"></script>
+
+  <!-- 02 — What Changed -->
+  <script src="slides/02-what-changed/00-section-card.js"></script>
+  <script src="slides/02-what-changed/01-heading.js"></script>
+  <script src="slides/02-what-changed/02-token-stream.js"></script>
+  <script src="slides/02-what-changed/03-compress.js"></script>
+
+  <!-- 03 — Where We Spend Our Time -->
+  <script src="slides/03-where-we-spend-our-time/00-section-card.js"></script>
+  <script src="slides/03-where-we-spend-our-time/01-orchestration-graph.js"></script>
+  <script src="slides/03-where-we-spend-our-time/02-activities.js"></script>
+  <script src="slides/03-where-we-spend-our-time/03-whoami.js"></script>
+  <script src="slides/03-where-we-spend-our-time/04-senior-engineers.js"></script>
+
+  <!-- 04 — Debugging & Quality -->
+  <script src="slides/04-debugging-quality/00-section-card.js"></script>
+  <script src="slides/04-debugging-quality/01-bad-ideas.js"></script>
+  <script src="slides/04-debugging-quality/02-terminal-log.js"></script>
+  <script src="slides/04-debugging-quality/03-old-new.js"></script>
+  <script src="slides/04-debugging-quality/04-counter.js"></script>
+
+  <!-- 05 — Stories from the Trenches -->
+  <script src="slides/05-trenches/00-section-card.js"></script>
+  <script src="slides/05-trenches/01-backdrop.js"></script>
+
+  <!-- 06 — Summary -->
+  <script src="slides/06-summary/00-section-card.js"></script>
+  <script src="slides/06-summary/01-det-prob.js"></script>
+  <script src="slides/06-summary/02-logic-outcomes.js"></script>
+  <script src="slides/06-summary/03-debug-systems.js"></script>
+  <script src="slides/06-summary/04-roles-taste.js"></script>
+  <script src="slides/06-summary/05-scarce.js"></script>
+  <script src="slides/06-summary/06-thanks.js"></script>
 
   <script>
     'use strict';
@@ -913,12 +1055,16 @@
     const stage = document.getElementById('stage');
     const welcome = document.getElementById('welcome');
     const uiTitle = document.getElementById('uiTitle');
-    const curSec = document.getElementById('curSec');
+    const curSlideEl = document.getElementById('curSlide');
+    const totalSlidesEl = document.getElementById('totalSlides');
     const dotsEl = document.getElementById('uiDots');
     const hint = document.getElementById('uiHint');
 
-    // build progress dots (8 sections)
-    for (let i = 1; i <= 8; i++) {
+    // populate total slide count now that SCD.slides is registered
+    totalSlidesEl.textContent = String(SCD.slides.length).padStart(2, '0');
+
+    // build progress dots (6 sections)
+    for (let i = 1; i <= 6; i++) {
       const d = document.createElement('div');
       d.className = 'dot';
       d.dataset.sec = i;
@@ -954,6 +1100,7 @@
 
       current = idx;
       updateUI(slide);
+      syncHash(idx);
 
       // init after small delay so the slide is visible
       setTimeout(() => {
@@ -975,7 +1122,7 @@
     function updateUI(slide) {
       uiTitle.textContent = slide.title || '';
       const sec = slide.section;
-      curSec.textContent = String(sec).padStart(2, '0');
+      curSlideEl.textContent = String(current + 1).padStart(2, '0');
       // dots
       const dots = dotsEl.querySelectorAll('.dot');
       dots.forEach(d => {
@@ -1028,7 +1175,7 @@
 
       ov.innerHTML = `
         <div class="overview-header">
-          <div class="left"><strong>Storyboard</strong>&nbsp;&nbsp;·&nbsp;&nbsp;${SCD.slides.length} slides&nbsp;&nbsp;·&nbsp;&nbsp;8 sections</div>
+          <div class="left"><strong>Storyboard</strong>&nbsp;&nbsp;·&nbsp;&nbsp;${SCD.slides.length} slides&nbsp;&nbsp;·&nbsp;&nbsp;6 sections</div>
           <div class="right"><span class="accent">click</span> to jump&nbsp;&nbsp;·&nbsp;&nbsp;<span class="accent">S</span> or <span class="accent">Esc</span> to close</div>
         </div>
         <div class="overview-grid" id="overviewGrid"></div>
@@ -1182,7 +1329,7 @@
         case 'H':
           showHint(); break;
         default:
-          if (/^[1-8]$/.test(e.key)) {
+          if (/^[1-6]$/.test(e.key)) {
             e.preventDefault();
             jumpToSection(parseInt(e.key, 10));
           }
@@ -1229,8 +1376,35 @@
     // bind welcome to keypress as well as click already handled above
     welcome.addEventListener('click', start, { once: true });
 
-    // initial state: don't auto-start; wait for input
-    document.body.classList.remove('armed'); // ensure off until first input
+    // ---- deeplink: URL hash mirrors current slide index ----
+    function parseHash() {
+      const m = location.hash.match(/^#(\d+)$/);
+      if (!m) return null;
+      const n = parseInt(m[1], 10);
+      return (n >= 0 && n < SCD.slides.length) ? n : null;
+    }
+    function syncHash(idx) {
+      const target = '#' + idx;
+      if (location.hash !== target) {
+        try { history.replaceState(null, '', target); }
+        catch (e) { location.hash = target; }
+      }
+    }
+    window.addEventListener('hashchange', () => {
+      const idx = parseHash();
+      if (idx !== null && idx !== current) go(idx);
+    });
+
+    // initial state: if URL has a valid slide hash, jump straight there
+    // (skipping the welcome screen). Otherwise wait for first input.
+    document.body.classList.remove('armed');
+    {
+      const initial = parseHash();
+      if (initial !== null) {
+        go(initial);
+        showHint();
+      }
+    }
 
   </script>
 </body>

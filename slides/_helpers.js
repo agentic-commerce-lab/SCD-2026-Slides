@@ -17,6 +17,35 @@ SCD.register = function (slide) {
 // ---- shared config ----
 SCD.CLOSING_URL = 'https://www.shopware.com/';
 
+// ---- session start: the moment the deck first loaded in this tab ----
+// Persisted in sessionStorage so reloads (and deeplinks) keep the same anchor.
+// New tab / window = new session.
+SCD.sessionStartMs = function () {
+  const key = 'scd.sessionStart';
+  let ts = null;
+  try { ts = sessionStorage.getItem(key); } catch (e) {}
+  if (!ts) {
+    ts = String(Date.now());
+    try { sessionStorage.setItem(key, ts); } catch (e) {}
+  }
+  return parseInt(ts, 10);
+};
+
+// elapsed seconds since session start
+SCD.sessionElapsedSec = function () {
+  return Math.max(0, (Date.now() - SCD.sessionStartMs()) / 1000);
+};
+
+// "MM:SS" or "H:MM:SS" formatting of session elapsed
+SCD.sessionElapsedClock = function () {
+  const s = Math.floor(SCD.sessionElapsedSec());
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const pad = n => String(n).padStart(2, '0');
+  return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
+};
+
 // ---- shared utilities ----
 
 // Fade-in nodes one after another by adding `.in` class. Used with `.stagger` CSS.

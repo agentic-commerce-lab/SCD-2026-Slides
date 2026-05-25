@@ -1,8 +1,9 @@
 'use strict';
 
 /**
- * Interactive: two columns ("Cheap now" / "Expensive now") fill with words
- * at LLM-style jittered pacing. Only the right column gets a trailing caret.
+ * Interactive: two columns ("Cheap now" / "Expensive now") fill with words,
+ * alternating left → right → left → right. When one side runs out, the
+ * other continues alone. Only the final landing column gets a caret.
  */
 
 function playTokenStream(el) {
@@ -14,38 +15,43 @@ function playTokenStream(el) {
   cheapEl.innerHTML = '';
   expEl.innerHTML = '';
 
-  const timers = [];
-  let cancelled = false;
-
-  function typeInto(container, words, baseDelay, showCaret) {
-    let i = 0;
-    function next() {
-      if (cancelled || i >= words.length) {
-        if (!cancelled && showCaret) {
-          const c = document.createElement('span');
-          c.className = 'caret';
-          container.appendChild(c);
-        }
-        return;
-      }
-      const word = words[i++];
-      const line = document.createElement('span');
-      line.className = 'item';
-      line.textContent = word;
-      container.appendChild(line);
-      requestAnimationFrame(() => line.style.opacity = '1');
-      const delay = 220 + Math.random() * 380;
-      timers.push(setTimeout(next, delay));
-    }
-    timers.push(setTimeout(next, baseDelay));
+  // build interleaved queue: cheap[0], exp[0], cheap[1], exp[1], ...
+  // when one side exhausts, only the other contributes.
+  const queue = [];
+  const max = Math.max(cheap.length, expensive.length);
+  for (let i = 0; i < max; i++) {
+    if (i < cheap.length) queue.push({ container: cheapEl, word: cheap[i] });
+    if (i < expensive.length) queue.push({ container: expEl, word: expensive[i] });
   }
 
   const style = document.createElement('style');
   style.textContent = `.stream-text .item { transition: opacity 200ms ease-out; }`;
   el.appendChild(style);
 
-  typeInto(cheapEl, cheap, 400, false);
-  typeInto(expEl, expensive, 800, true);
+  let idx = 0;
+  let cancelled = false;
+  const timers = [];
+
+  function nextOne() {
+    if (cancelled) return;
+    if (idx >= queue.length) {
+      // landed on expensive — attach caret there
+      const c = document.createElement('span');
+      c.className = 'caret';
+      expEl.appendChild(c);
+      return;
+    }
+    const { container, word } = queue[idx++];
+    const item = document.createElement('span');
+    item.className = 'item';
+    item.textContent = word;
+    container.appendChild(item);
+    requestAnimationFrame(() => item.style.opacity = '1');
+    const delay = 320 + Math.random() * 280;
+    timers.push(setTimeout(nextOne, delay));
+  }
+
+  timers.push(setTimeout(nextOne, 400));
 
   return () => {
     cancelled = true;

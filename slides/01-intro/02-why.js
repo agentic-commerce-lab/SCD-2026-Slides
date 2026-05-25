@@ -2,7 +2,7 @@
 
 SCD.register({
   section: 1,
-  title: '01 · Cold Open',
+  title: '01 · Intro',
   render(el) {
     el.innerHTML = `
       <div class="pre-label"><span class="dot"></span>The question we keep avoiding</div>

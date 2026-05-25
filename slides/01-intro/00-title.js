@@ -1,8 +1,8 @@
 'use strict';
 
 SCD.register({
-  section: 0,
-  title: 'Title',
+  section: 1,
+  title: '01 · Intro',
   render(el) {
     el.innerHTML = `
       <div class="pre-label blue"><span class="dot"></span>SCD · 2026 · Keynote</div>

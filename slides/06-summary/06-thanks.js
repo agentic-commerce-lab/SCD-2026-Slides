@@ -25,8 +25,8 @@ function renderQR(el) {
 }
 
 SCD.register({
-  section: 8,
-  title: '08 · Thank you',
+  section: 6,
+  title: '06 · Thank you',
   render(el) {
     el.innerHTML = `
       <div class="closing-wrap stagger">
