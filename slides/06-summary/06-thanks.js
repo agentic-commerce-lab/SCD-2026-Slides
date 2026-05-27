@@ -37,7 +37,7 @@ SCD.register({
         <div class="thanks">Thank you.</div>
         <div class="thanks-underline"></div>
         <div class="thanks-names">
-          <strong>Daniel Nögel</strong>&nbsp;&nbsp;·&nbsp;&nbsp;<strong>Stefan Hamann</strong>
+          <strong>Stefan Hamann</strong>&nbsp;&nbsp;·&nbsp;&nbsp;<strong>Daniel Nögel</strong>
         </div>
         <div class="thanks-url"><span class="accent-blue">→</span>&nbsp;&nbsp;${SCD.CLOSING_URL}</div>
       </div>

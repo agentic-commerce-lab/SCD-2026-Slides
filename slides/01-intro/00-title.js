@@ -14,7 +14,7 @@ SCD.register({
         </div>
         <div class="underline"></div>
         <div class="sub">
-          <strong>Daniel Nögel</strong>&nbsp;&nbsp;·&nbsp;&nbsp;<strong>Stefan Hamann</strong>
+          <strong>Stefan Hamann</strong>&nbsp;&nbsp;·&nbsp;&nbsp;<strong>Daniel Nögel</strong>
         </div>
       </div>
     `;
