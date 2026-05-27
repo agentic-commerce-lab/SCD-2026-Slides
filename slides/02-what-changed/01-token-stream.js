@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Interactive: two columns ("Cheap now" / "Expensive now") fill with words,
- * alternating left → right → left → right. When one side runs out, the
- * other continues alone. Only the final landing column gets a caret.
+ * Interactive: two columns ("Cheap now" / "Expensive now") fill with words.
+ * Cheap column fills first (top-to-bottom, each item with a delay), then the
+ * expensive column fills. Only the final landing column gets a caret.
  */
 
 function playTokenStream(el) {
@@ -15,14 +15,10 @@ function playTokenStream(el) {
   cheapEl.innerHTML = '';
   expEl.innerHTML = '';
 
-  // build interleaved queue: cheap[0], exp[0], cheap[1], exp[1], ...
-  // when one side exhausts, only the other contributes.
+  // column-by-column: all of cheap first, then all of expensive
   const queue = [];
-  const max = Math.max(cheap.length, expensive.length);
-  for (let i = 0; i < max; i++) {
-    if (i < cheap.length) queue.push({ container: cheapEl, word: cheap[i] });
-    if (i < expensive.length) queue.push({ container: expEl, word: expensive[i] });
-  }
+  cheap.forEach(word => queue.push({ container: cheapEl, word }));
+  expensive.forEach(word => queue.push({ container: expEl, word }));
 
   const style = document.createElement('style');
   style.textContent = `.stream-text .item { transition: opacity 200ms ease-out; }`;

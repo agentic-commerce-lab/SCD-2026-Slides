@@ -79,45 +79,40 @@ function playOrchestrationGraph(el) {
   }
 
   let cancelled = false;
-  const intervals = [];
+  const timers = [];
 
-  // fade-in nodes + edges
-  nodesG.querySelectorAll('g').forEach((n, i) => {
+  // hide everything initially
+  nodesG.querySelectorAll('g').forEach(n => {
     n.style.opacity = '0';
     n.style.transition = 'opacity 500ms ease-out';
-    setTimeout(() => { if (!cancelled) n.style.opacity = '1'; }, 200 + i * 120);
   });
-  edgesG.querySelectorAll('line').forEach((e, i) => {
+  edgesG.querySelectorAll('line').forEach(e => {
     e.style.opacity = '0';
-    e.style.transition = 'opacity 700ms ease-out';
-    setTimeout(() => { if (!cancelled) e.style.opacity = '1'; }, 600 + i * 80);
+    e.style.transition = 'opacity 500ms ease-out';
   });
 
-  // particles flow inward (satellite → YOU) — the engineer pulls signals in
-  let pulseIdx = 0;
-  const pulse = () => {
-    if (cancelled) return;
-    const s = satellites[pulseIdx % satellites.length];
-    const nodeG = nodesG.querySelector(`[data-id="${s.id}"]`);
-    const circle = nodeG?.querySelector('.node-circle');
-    if (circle) {
-      circle.classList.add('active');
-      setTimeout(() => circle.classList.remove('active'), 700);
-    }
-    const p = positions[s.id];
-    SCD.emitParticle(particlesG, p.x, p.y, 0, 0, 1100);
-    pulseIdx++;
-  };
-  const startT = setTimeout(() => {
-    pulse();
-    intervals.push(setInterval(pulse, 900));
-  }, 1400);
-  intervals.push(startT);
+  // YOU appears first at the center
+  const youNode = nodesG.querySelector('g:not([data-id])');
+  timers.push(setTimeout(() => {
+    if (!cancelled && youNode) youNode.style.opacity = '1';
+  }, 200));
+
+  // satellites + their edges reveal one at a time, 500ms apart
+  const edges = edgesG.querySelectorAll('line');
+  satellites.forEach((s, i) => {
+    const delay = 800 + i * 500;
+    const node = nodesG.querySelector(`[data-id="${s.id}"]`);
+    const edge = edges[i];
+    timers.push(setTimeout(() => {
+      if (cancelled) return;
+      if (edge) edge.style.opacity = '1';
+      if (node) node.style.opacity = '1';
+    }, delay));
+  });
 
   return () => {
     cancelled = true;
-    intervals.forEach(clearTimeout);
-    intervals.forEach(clearInterval);
+    timers.forEach(clearTimeout);
   };
 }
 
@@ -132,10 +127,17 @@ SCD.register({
           <g class="particles" id="particles"></g>
           <g class="nodes" id="nodes"></g>
         </svg>
-        <div class="graph-caption">The engineer orchestrates <span style="color:var(--accent)">goals · context · memory · tools · constraints</span></div>
+      </div>
+      <div class="citation" id="cit">
+        "An agent is a for-loop containing an LLM call." <span class="name">David Crawshaw<span class="role"> · Tailscale · 2025</span></span>
       </div>
     `;
   },
-  init(el) { return playOrchestrationGraph(el); },
+  init(el) {
+    const cleanup = playOrchestrationGraph(el);
+    // citation appears after the last satellite has revealed (~3.8s)
+    setTimeout(() => el.querySelector('#cit')?.classList.add('in'), 3800);
+    return cleanup;
+  },
   replay(el) { return playOrchestrationGraph(el); }
 });

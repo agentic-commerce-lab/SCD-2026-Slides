@@ -5,10 +5,10 @@ SCD.register({
   title: '01 · Intro',
   render(el) {
     el.innerHTML = `
-      <div class="hero kinetic">
+      <div class="hero kinetic cold-open">
         <span class="line dim">2026 is <span class="dim">not</span> the year</span>
         <span class="line dim">AI replaced developers.</span>
-        <br><br>
+        <span class="line spacer"></span>
         <span class="line">It's the year we realized</span>
         <span class="line"><span class="accent">code was never</span></span>
         <span class="line"><span class="accent">the real bottleneck.</span><span class="caret"></span></span>
