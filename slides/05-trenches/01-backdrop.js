@@ -6,7 +6,7 @@ SCD.register({
   render(el) {
     el.innerHTML = `
       <div class="backdrop-prompt">
-        <span class="accent">~/stefan</span> $ <span class="caret"></span>
+        <span class="accent">~/stefan</span> $ <span class="caret block"></span>
       </div>
     `;
   }

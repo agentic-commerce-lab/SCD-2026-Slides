@@ -33,7 +33,7 @@ function playWhoami(el) {
       out.appendChild(span);
       if (isFinal) {
         const c = document.createElement('span');
-        c.className = 'caret';
+        c.className = 'caret block';
         out.appendChild(c);
       }
       // small fade-in
@@ -60,6 +60,8 @@ function playWhoami(el) {
 SCD.register({
   section: 3,
   title: '03 · whoami',
+  // step 0 = prompt only (waiting); step 1 = cycle the identities
+  steps: 2,
   render(el) {
     el.innerHTML = `
       <div class="whoami">
@@ -68,10 +70,13 @@ SCD.register({
           <span class="wm-sigil">$</span>
           <span class="wm-cmd">whoami</span>
         </div>
-        <div class="wm-out" id="whoami-out"></div>
+        <div class="wm-out" id="whoami-out"><span class="caret block"></span></div>
       </div>
     `;
   },
-  init(el) { return playWhoami(el); },
+  init(el) { /* step 0: just the prompt with a blinking cursor in the output area */ },
+  step(el, n) {
+    if (n === 1) return playWhoami(el);
+  },
   replay(el) { return playWhoami(el); }
 });
