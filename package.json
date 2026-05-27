@@ -1,0 +1,12 @@
+{
+  "name": "scd-keynote",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SCD 2026 keynote deck — A Reality Check on AI-Driven Software Engineering",
+  "scripts": {
+    "snap": "node tools/snap.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}
