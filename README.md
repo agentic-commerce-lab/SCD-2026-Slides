@@ -37,6 +37,6 @@ The URL mirrors the current slide (`#12`) — reload lands you right back on it.
 
 ## Notes for the talk
 
-- Slide 19 shows a live counter that starts ticking on first load (sessionStorage-backed). Open the deck with slide 1 to get a clean run.
-- Slide 11 (`whoami`) and slide 17 (hallucinations chart) are two-step slides — press `→` once more before moving on.
-- Closing QR (slide 28) currently points to `https://www.shopware.com/` — configurable in `slides/_helpers.js` via `SCD.CLOSING_URL`.
+- The counter slide in section 4 starts ticking on first load (sessionStorage-backed). Open the deck from the title slide to get a clean run.
+- The `whoami` slide (section 3) and the hallucinations chart (section 4) are two-step — press `→` once more before moving on.
+- The closing QR currently points to `https://www.shopware.com/` — configurable in `slides/_helpers.js` via `SCD.CLOSING_URL`.
